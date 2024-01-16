@@ -1,17 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
     fetchFilms();
-
     document.getElementById("buy-ticket").addEventListener("click", buyTicket);
 });
+
+let films = []; 
 
 function fetchFilms() {
     fetch("http://localhost:3000/films")
         .then(response => response.json())
         .then(data => {
+            console.log("Fetched films:", data);  // Debugging
             films = data;
             displayFilms(films);
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error fetching films:', error));
 }
 
 function displayFilms(films) {
@@ -27,14 +29,20 @@ function displayFilms(films) {
 }
 
 function displayFilmDetails(film) {
-    document.getElementById("film-title").innerText = film.title;
+    console.log("Displaying film details for:", film.title);  
 
+    document.getElementById("film-title").innerText = film.title;
     const poster = document.getElementById("film-poster");
     poster.src = film.poster;
     poster.alt = film.title + " Poster";
     poster.style.display = 'block'; 
 
+    console.log("Poster URL:", poster.src);  // Debugging
+
     const details = document.getElementById("film-details");
+    details.innerHTML = `<h2 id="film-title">${film.title}</h2>
+    <img id="film-poster" src="${film.poster}" alt="${film.title} Poster" style="display: block;">`;
+
     details.innerHTML += `
         <p>Runtime: ${film.runtime} minutes</p>
         <p>Showtime: ${film.showtime}</p>
