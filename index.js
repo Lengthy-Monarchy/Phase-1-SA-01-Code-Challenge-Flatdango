@@ -1,15 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
     fetchFilms();
     document.getElementById("buy-ticket").addEventListener("click", buyTicket);
-});
+
 
 let films = []; 
 
 function fetchFilms() {
     fetch("http://localhost:3000/films")
-        .then(response => response.json())
+        .then((response)=>{
+            if(!response.ok){
+                throw new Error('Failed to fetch')
+            }
+            return response.json()
+        })
         .then(data => {
-            console.log("Fetched films:", data);  // Debugging
+            console.log("Fetched films:", data);  
             films = data;
             displayFilms(films);
         })
@@ -37,7 +42,7 @@ function displayFilmDetails(film) {
     poster.alt = film.title + " Poster";
     poster.style.display = 'block'; 
 
-    console.log("Poster URL:", poster.src);  // Debugging
+    console.log("Poster URL:", poster.src);  
 
     const details = document.getElementById("film-details");
     details.innerHTML = `<h2 id="film-title">${film.title}</h2>
@@ -72,3 +77,4 @@ function getSelectedFilm() {
     return films.find(film => film.title === title);
 }
 
+});
